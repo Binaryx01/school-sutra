@@ -61,7 +61,7 @@
             <a href="{{route('sessions.index')}}"><i class="fas fa-calendar-alt"></i> Sessions</a>
             <a href="#"><i class="fas fa-users"></i> Students</a>
             <a href="#"><i class="fas fa-chalkboard-teacher"></i> Teachers</a>
-            <a href="#"><i class="fas fa-layer-group"></i> Classes & Sections</a>
+            <a href="{{route('classes.index')}}"><i class="fas fa-layer-group"></i> Classes & Sections</a>
             <a href="#"><i class="fas fa-book"></i> Subjects</a>
             <a href="#"><i class="fas fa-user-check"></i> Attendance</a>
             <a href="#"><i class="fas fa-clipboard-list"></i> Exams & Fees</a>
