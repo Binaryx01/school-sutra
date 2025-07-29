@@ -59,7 +59,7 @@
             <h5 class="text-center mb-4"><i class="fas fa-school"></i> School Sutra</h5>
             <a href="{{ url('/dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i> Dashboard</a>
             <a href="{{route('sessions.index')}}"><i class="fas fa-calendar-alt"></i> Sessions</a>
-            <a href="#"><i class="fas fa-users"></i> Students</a>
+            <a href="{{route('students.index')}}"><i class="fas fa-users"></i> Students</a>
             <a href="#"><i class="fas fa-chalkboard-teacher"></i> Teachers</a>
             <a href="{{route('classes.index')}}"><i class="fas fa-layer-group"></i> Classes & Sections</a>
             <a href="#"><i class="fas fa-book"></i> Subjects</a>

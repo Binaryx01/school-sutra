@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassModel;
+use App\Models\SchoolClass;
 use App\Models\Section;
 use Illuminate\Http\Request;
 
@@ -14,7 +14,7 @@ class ClassModelController extends Controller
     public function index()
     {
         // Eager load sections
-        $classes = ClassModel::with('sections')->get();
+        $classes = SchoolClass::with('sections')->get();
 
         return view('classes.index', compact('classes'));
     }
@@ -36,7 +36,7 @@ class ClassModelController extends Controller
             'name' => 'required|string|unique:classes,name',
         ]);
 
-        ClassModel::create([
+        SchoolClass::create([
             'name' => $request->name,
         ]);
 
@@ -66,19 +66,19 @@ class ClassModelController extends Controller
      */
     public function edit(ClassModel $classModel)
     {
-        return view('classes.edit', compact('classModel'));
+        return view('classes.edit', compact('SchoolClass'));
     }
 
     /**
      * Update the specified class in storage.
      */
-    public function update(Request $request, ClassModel $classModel)
+    public function update(Request $request, SchoolClass $classModel)
     {
         $request->validate([
-            'name' => 'required|string|unique:classes,name,' . $classModel->id,
+            'name' => 'required|string|unique:classes,name,' . $SchoolClass->id,
         ]);
 
-        $classModel->update([
+        $SchoolClass->update([
             'name' => $request->name,
         ]);
 
@@ -88,12 +88,12 @@ class ClassModelController extends Controller
     /**
      * Remove the specified class from storage.
      */
-    public function destroy(ClassModel $classModel)
+    public function destroy(SchoolClass $SchoolClass)
     {
         // Optionally delete sections related to the class first
-        $classModel->sections()->delete();
+        $SchoolClass->sections()->delete();
 
-        $classModel->delete();
+        $SchoolClass->delete();
 
         return redirect()->route('classes.index')->with('success', 'Class deleted successfully!');
     }

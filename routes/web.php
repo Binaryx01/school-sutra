@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\SchoolSessionController;
 use App\Http\Controllers\ClassModelController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\StudentController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,3 +52,6 @@ Route::post('/sessions/{id}/activate', [SchoolSessionController::class, 'activat
 Route::resource('classes', ClassModelController::class);
 Route::resource('sections', SectionController::class);
 Route::post('/classes/store-section', [ClassModelController::class, 'storeSection'])->name('classes.storeSection');
+
+
+Route::resource('students', StudentController::class);
