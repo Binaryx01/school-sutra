@@ -6,6 +6,9 @@ use App\Http\Controllers\SchoolSessionController;
 use App\Http\Controllers\ClassModelController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\SubjectController;
+
 
 
 Route::get('/', function () {
@@ -55,3 +58,10 @@ Route::post('/classes/store-section', [ClassModelController::class, 'storeSectio
 
 
 Route::resource('students', StudentController::class);
+
+// routes/web.php
+Route::resource('teachers', TeacherController::class);
+
+
+//for subjectcontroller
+Route::resource('subjects', SubjectController::class);
