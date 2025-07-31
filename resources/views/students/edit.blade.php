@@ -6,7 +6,7 @@
         <div class="card-header bg-gradient-primary text-white py-3">
             <div class="d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">
-                    <i class="fas fa-user-plus me-2"></i>Register New Student
+                    <i class="fas fa-user-edit me-2"></i>Edit Student Profile
                 </h4>
                 <a href="{{ route('students.index') }}" class="btn btn-sm btn-light">
                     <i class="fas fa-arrow-left me-1"></i> Back to List
@@ -15,8 +15,9 @@
         </div>
         
         <div class="card-body">
-            <form action="{{ route('students.store') }}" method="POST" class="needs-validation" novalidate>
+            <form action="{{ route('students.update', $student->id) }}" method="POST" class="needs-validation" novalidate>
                 @csrf
+                @method('PUT')
 
                 <!-- Personal Info Section -->
                 <div class="mb-4 p-3 bg-light rounded-3">
@@ -32,10 +33,7 @@
                                     <i class="fas fa-user"></i>
                                 </span>
                                 <input type="text" name="first_name" class="form-control" 
-                                       value="{{ old('first_name') }}" required>
-                                <div class="invalid-feedback">
-                                    Please provide a first name
-                                </div>
+                                       value="{{ old('first_name', $student->first_name) }}" required>
                             </div>
                         </div>
                         
@@ -46,10 +44,7 @@
                                     <i class="fas fa-user"></i>
                                 </span>
                                 <input type="text" name="last_name" class="form-control" 
-                                       value="{{ old('last_name') }}" required>
-                                <div class="invalid-feedback">
-                                    Please provide a last name
-                                </div>
+                                       value="{{ old('last_name', $student->last_name) }}" required>
                             </div>
                         </div>
                         
@@ -60,10 +55,7 @@
                                     <i class="fas fa-calendar-day"></i>
                                 </span>
                                 <input type="date" name="date_of_birth" class="form-control"
-                                       value="{{ old('date_of_birth') }}" required>
-                                <div class="invalid-feedback">
-                                    Please select date of birth
-                                </div>
+                                       value="{{ old('date_of_birth', $student->date_of_birth->format('Y-m-d')) }}" required>
                             </div>
                         </div>
                         
@@ -71,25 +63,22 @@
                             <label class="form-label fw-bold">Gender</label>
                             <div class="btn-group w-100" role="group">
                                 <input type="radio" class="btn-check" name="gender" id="male" 
-                                       value="male" {{ old('gender') == 'male' ? 'checked' : '' }} required>
+                                       value="male" {{ $student->gender == 'male' ? 'checked' : '' }}>
                                 <label class="btn btn-outline-primary" for="male">
                                     <i class="fas fa-mars me-2"></i>Male
                                 </label>
                                 
                                 <input type="radio" class="btn-check" name="gender" id="female" 
-                                       value="female" {{ old('gender') == 'female' ? 'checked' : '' }}>
+                                       value="female" {{ $student->gender == 'female' ? 'checked' : '' }}>
                                 <label class="btn btn-outline-primary" for="female">
                                     <i class="fas fa-venus me-2"></i>Female
                                 </label>
                                 
                                 <input type="radio" class="btn-check" name="gender" id="other" 
-                                       value="other" {{ old('gender') == 'other' ? 'checked' : '' }}>
+                                       value="other" {{ $student->gender == 'other' ? 'checked' : '' }}>
                                 <label class="btn btn-outline-primary" for="other">
                                     <i class="fas fa-genderless me-2"></i>Other
                                 </label>
-                            </div>
-                            <div class="invalid-feedback" style="display: block;">
-                                Please select gender
                             </div>
                         </div>
                     </div>
@@ -107,20 +96,23 @@
                             <select name="class_id" id="classSelect" class="form-select select2" required>
                                 <option value="">Select Class</option>
                                 @foreach($classes as $class)
-                                    <option value="{{ $class->id }}" {{ old('class_id') == $class->id ? 'selected' : '' }}>
+                                    <option value="{{ $class->id }}" 
+                                        {{ $student->class_id == $class->id ? 'selected' : '' }}>
                                         {{ $class->name }}
                                     </option>
                                 @endforeach
                             </select>
-                            <div class="invalid-feedback">
-                                Please select a class
-                            </div>
                         </div>
                         
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Section (Optional)</label>
                             <select name="section_id" id="sectionSelect" class="form-select select2">
                                 <option value="">No Section</option>
+                                @if($student->section_id)
+                                    <option value="{{ $student->section_id }}" selected>
+                                        {{ $student->section->name }}
+                                    </option>
+                                @endif
                             </select>
                         </div>
                     </div>
@@ -140,10 +132,7 @@
                                     <i class="fas fa-user-shield"></i>
                                 </span>
                                 <input type="text" name="guardian_name" class="form-control"
-                                       value="{{ old('guardian_name') }}" required>
-                                <div class="invalid-feedback">
-                                    Please provide guardian name
-                                </div>
+                                       value="{{ old('guardian_name', $student->guardian_name) }}" required>
                             </div>
                         </div>
                         
@@ -154,10 +143,7 @@
                                     <i class="fas fa-phone"></i>
                                 </span>
                                 <input type="text" name="contact_number" class="form-control"
-                                       value="{{ old('contact_number') }}" required>
-                                <div class="invalid-feedback">
-                                    Please provide contact number
-                                </div>
+                                       value="{{ old('contact_number', $student->contact_number) }}" required>
                             </div>
                         </div>
                         
@@ -167,10 +153,7 @@
                                 <span class="input-group-text bg-primary text-white">
                                     <i class="fas fa-map-marker-alt"></i>
                                 </span>
-                                <textarea name="address" class="form-control" rows="2" required>{{ old('address') }}</textarea>
-                                <div class="invalid-feedback">
-                                    Please provide address
-                                </div>
+                                <textarea name="address" class="form-control" rows="2" required>{{ old('address', $student->address) }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -179,10 +162,10 @@
                 <!-- Form Actions -->
                 <div class="d-flex justify-content-between mt-4">
                     <button type="reset" class="btn btn-outline-danger">
-                        <i class="fas fa-undo me-1"></i> Clear Form
+                        <i class="fas fa-undo me-1"></i> Reset
                     </button>
                     <button type="submit" class="btn btn-primary px-4">
-                        <i class="fas fa-save me-1"></i> Register Student
+                        <i class="fas fa-save me-1"></i> Update Profile
                     </button>
                 </div>
             </form>
@@ -212,29 +195,18 @@ $(document).ready(function() {
                     sectionSelect.append(new Option(section.name, section.id));
                 });
                 
-                // Select old value if exists (for form re-population)
-                @if(old('section_id'))
-                    sectionSelect.val({{ old('section_id') }}).trigger('change');
+                // Re-select current section if exists
+                @if($student->section_id)
+                    sectionSelect.val({{ $student->section_id }}).trigger('change');
                 @endif
             });
         }
     });
 
-    // Bootstrap form validation
-    (function() {
-        'use strict';
-        const forms = document.querySelectorAll('.needs-validation');
-        
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
-    })();
+    // Trigger change on page load if class is selected
+    @if($student->class_id)
+        $('#classSelect').trigger('change');
+    @endif
 });
 </script>
 
@@ -248,13 +220,6 @@ $(document).ready(function() {
     .select2-container--bootstrap-5 .select2-selection {
         padding: 0.375rem 0.75rem;
         height: auto;
-    }
-    .input-group-text {
-        min-width: 45px;
-        justify-content: center;
-    }
-    .was-validated .btn-group .btn-outline-primary:invalid ~ .invalid-feedback {
-        display: block;
     }
 </style>
 @endsection

@@ -100,7 +100,10 @@
                 <i class="fas fa-user-check"></i> Attendance
             </a>
             <a href="#" class="{{ request()->is('exams*') || request()->is('fees*') ? 'active' : '' }}">
-                <i class="fas fa-clipboard-list"></i> Exams & Fees
+                <i class="fas fa-clipboard-list"></i> Exams & Results
+            </a>
+               <a href="#" class="{{ request()->is('exams*') || request()->is('fees*') ? 'active' : '' }}">
+                <i class="fas fa-clipboard-list"></i>Fees
             </a>
             <a href="#" class="{{ request()->is('notice-board*') ? 'active' : '' }}">
                 <i class="fas fa-bullhorn"></i> Notice Board

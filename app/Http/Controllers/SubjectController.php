@@ -10,13 +10,13 @@ class SubjectController extends Controller
 {
     public function index()
     {
-        $subjects = Subject::with('schoolclass')->get(); // Load related Schoolclass
+        $subjects = Subject::with('SchoolClass')->get(); // Load related Schoolclass
         return view('subjects.index', compact('subjects'));
     }
 
     public function create()
     {
-        $classes = Schoolclass::all(); // Fetch all classes for dropdown
+        $classes = SchoolClass::all(); // Fetch all classes for dropdown
         return view('subjects.create', compact('classes'));
     }
 

@@ -32,9 +32,9 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $subject->name }}</td>
-                            <td>{{ $subject->class_id }}</td>
+                            <td>{{ $subject->schoolclass->name ?? 'N/A' }}</td>
                             <td>{{ $subject->code ?? '-' }}</td>
-                            <td>{{ $subject->type ?? '-' }}</td>
+                            <td>{{ $subject->type }}</td>
                             <td>
                                 <a href="{{ route('subjects.edit', $subject->id) }}" class="btn btn-sm btn-warning">
                                     <i class="fas fa-edit"></i> Edit

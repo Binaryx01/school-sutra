@@ -11,13 +11,26 @@ class ClassModelController extends Controller
     /**
      * Display a listing of the classes with their sections.
      */
-    public function index()
-    {
-        // Eager load sections
-        $classes = SchoolClass::with('sections')->get();
 
-        return view('classes.index', compact('classes'));
-    }
+
+public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $classes = SchoolClass::with([
+        'sections' => function ($query) {
+            $query->withCount('students');
+        }
+    ])
+    ->withCount('students') // Add this to count all students directly linked to the class
+    ->when($search, function ($query) use ($search) {
+        $query->where('name', 'like', '%' . $search . '%');
+    })
+    ->paginate(10); // Pagination remains
+
+    return view('classes.index', compact('classes', 'search'));
+}
+
 
     /**
      * Show the form for creating a new class.

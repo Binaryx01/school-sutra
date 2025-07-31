@@ -27,8 +27,15 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="class_id" class="form-label">Class (Enter class name or ID)</label>
-                    <input type="text" class="form-control" id="class_id" name="class_id" required value="{{ old('class_id') }}">
+                    <label for="class_id" class="form-label">Class</label>
+                    <select class="form-select" name="class_id" id="class_id" required>
+                        <option value="">-- Select Class --</option>
+                        @foreach($classes as $class)
+                            <option value="{{ $class->id }}" {{ old('class_id') == $class->id ? 'selected' : '' }}>
+                                {{ $class->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="mb-3">

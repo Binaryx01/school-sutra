@@ -56,7 +56,7 @@ Route::resource('classes', ClassModelController::class);
 Route::resource('sections', SectionController::class);
 Route::post('/classes/store-section', [ClassModelController::class, 'storeSection'])->name('classes.storeSection');
 
-
+// this is for student
 Route::resource('students', StudentController::class);
 
 // routes/web.php

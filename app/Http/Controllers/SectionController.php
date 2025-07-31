@@ -10,10 +10,24 @@ class SectionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        
+  public function index()
+{
+    $classes = SchoolClass::with(['sections' => function ($query) {
+        $query->withCount('students');
+    }])->get();
+
+    foreach ($classes as $class) {
+        // Collect unique student IDs across all sections
+        $studentIds = $class->sections->flatMap(function ($section) {
+            return $section->students()->pluck('id');
+        })->unique();
+
+        $class->students_count = $studentIds->count();
     }
+
+    return view('classes.index', compact('classes'));
+}
+
 
     /**
      * Show the form for creating a new resource.

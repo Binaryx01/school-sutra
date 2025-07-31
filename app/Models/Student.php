@@ -10,6 +10,10 @@ class Student extends Model
 {
    use HasFactory;
 
+   protected $casts = [
+    'date_of_birth' => 'date:Y-m-d', // Ensures proper Carbon conversion
+];
+
     protected $fillable = [
         'first_name',
         'last_name',

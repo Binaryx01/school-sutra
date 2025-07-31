@@ -8,6 +8,14 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h2 class="mb-0">Class Management</h2>
+                <form action="{{ route('classes.index') }}" method="GET" class="d-flex" style="max-width: 300px;">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Search classes..." value="{{ request('search') }}">
+                        <button class="btn btn-outline-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -20,10 +28,10 @@
     @endif
 
     <div class="row mb-4">
-        <!-- Add Class Card -->
+        <!-- Add Class -->
         <div class="col-md-6 mb-3 mb-md-0">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white border-0">
                     <h5 class="mb-0">Add New Class</h5>
                 </div>
                 <div class="card-body">
@@ -40,10 +48,10 @@
             </div>
         </div>
 
-        <!-- Add Section Card -->
+        <!-- Add Section -->
         <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-secondary text-white">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-secondary text-white border-0">
                     <h5 class="mb-0">Add New Section</h5>
                 </div>
                 <div class="card-body">
@@ -73,10 +81,15 @@
         </div>
     </div>
 
-    <!-- Classes Table -->
-    <div class="card shadow-sm">
-        <div class="card-header bg-white">
-            <h5 class="mb-0">Class List</h5>
+    <!-- Class List Table -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Class List</h5>
+                <div class="text-muted">
+                    {{ $classes->total() }} total classes
+                </div>
+            </div>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -86,30 +99,30 @@
                             <th width="5%">#</th>
                             <th width="25%">Class</th>
                             <th width="45%">Sections</th>
-                            <th width="25%">Students</th>
+                            <th width="25%">Total Students</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($classes as $index => $class)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ ($classes->currentPage() - 1) * $classes->perPage() + $index + 1 }}</td>
+                                <td><strong>{{ $class->name }}</strong></td>
                                 <td>
-                                    <strong>{{ $class->name }}</strong>
-                                </td>
-                                <td>
-                                    @foreach($class->sections as $section)
+                                    @forelse($class->sections as $section)
                                         <span class="badge bg-light text-dark border me-1 mb-1 py-2 px-3">
                                             {{ $section->name }}
-                                            <small class="text-muted ms-1">({{ $section->students_count ?? 0 }})</small>
+                                            <small class="text-muted ms-1">
+                                                ({{ $section->students_count ?? 0 }})
+                                            </small>
                                         </span>
-                                    @endforeach
-                                    @if($class->sections->isEmpty())
+                                    @empty
                                         <span class="text-muted">No sections</span>
-                                    @endif
+                                    @endforelse
                                 </td>
                                 <td>
-                                    <span class="badge bg-primary rounded-pill py-2 px-3">
-                                        {{ $class->students_count ?? 0 }} students
+                                    <span class="fs-5 fw-bold text-primary">
+                                        {{ $class->students_count ?? 0 }} 
+                                        <small class="fs-6 fw-normal">students</small>
                                     </span>
                                 </td>
                             </tr>
@@ -124,6 +137,12 @@
                     </tbody>
                 </table>
             </div>
+            
+            @if($classes->hasPages())
+                <div class="card-footer bg-white border-0 py-3">
+                    {{ $classes->withQueryString()->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </div>
@@ -135,8 +154,14 @@
     .table-hover tbody tr:hover {
         background-color: #f8f9fa;
     }
-    .card-header {
-        border-bottom: none;
+    .card {
+        border-radius: 0.5rem;
+    }
+    .form-control, .form-select {
+        border-radius: 0.25rem;
+    }
+    .pagination {
+        margin-bottom: 0;
     }
 </style>
 @endsection
