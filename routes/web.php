@@ -8,6 +8,10 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\FeeTypeController;
+use App\Http\Controllers\FeeStructureController;
+use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\PaymentController;
 
 
 
@@ -65,3 +69,13 @@ Route::resource('teachers', TeacherController::class);
 
 //for subjectcontroller
 Route::resource('subjects', SubjectController::class);
+
+//for payment and fee 
+Route::resource('fee-types', FeeTypeController::class);
+Route::resource('fee-structures', FeeStructureController::class);
+Route::resource('payment-methods', PaymentMethodController::class);
+Route::resource('payments', PaymentController::class);
+
+
+//ajax route for payments
+Route::get('/students/by-class/{class_id}', [StudentController::class, 'getByClass']);

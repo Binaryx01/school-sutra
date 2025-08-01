@@ -15,6 +15,16 @@
         </div>
         
         <div class="card-body">
+            @if($errors->any())
+                <div class="alert alert-danger mb-4">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('students.store') }}" method="POST" class="needs-validation" novalidate>
                 @csrf
 
@@ -38,7 +48,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Last Name</label>
                             <div class="input-group">
@@ -52,7 +62,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Date of Birth</label>
                             <div class="input-group">
@@ -66,30 +76,30 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Gender</label>
-                            <div class="btn-group w-100" role="group">
+                            <div class="btn-group w-100" role="group" aria-label="Gender selection">
                                 <input type="radio" class="btn-check" name="gender" id="male" 
-                                       value="male" {{ old('gender') == 'male' ? 'checked' : '' }} required>
+                                       value="male" {{ old('gender', 'male') == 'male' ? 'checked' : '' }} required>
                                 <label class="btn btn-outline-primary" for="male">
                                     <i class="fas fa-mars me-2"></i>Male
                                 </label>
-                                
+
                                 <input type="radio" class="btn-check" name="gender" id="female" 
                                        value="female" {{ old('gender') == 'female' ? 'checked' : '' }}>
                                 <label class="btn btn-outline-primary" for="female">
                                     <i class="fas fa-venus me-2"></i>Female
                                 </label>
-                                
+
                                 <input type="radio" class="btn-check" name="gender" id="other" 
                                        value="other" {{ old('gender') == 'other' ? 'checked' : '' }}>
                                 <label class="btn btn-outline-primary" for="other">
                                     <i class="fas fa-genderless me-2"></i>Other
                                 </label>
                             </div>
-                            <div class="invalid-feedback" style="display: block;">
-                                Please select gender
+                            <div class="invalid-feedback d-block">
+                                @error('gender') {{ $message }} @enderror
                             </div>
                         </div>
                     </div>
@@ -116,12 +126,22 @@
                                 Please select a class
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Section (Optional)</label>
+                            <label class="form-label fw-bold">Section</label>
                             <select name="section_id" id="sectionSelect" class="form-select select2">
-                                <option value="">No Section</option>
+                                <option value="">Select Section</option>
+                                @if(old('class_id'))
+                                    @foreach(\App\Models\Section::where('class_id', old('class_id'))->get() as $section)
+                                        <option value="{{ $section->id }}" {{ old('section_id') == $section->id ? 'selected' : '' }}>
+                                            {{ $section->name }}
+                                        </option>
+                                    @endforeach
+                                @endif
                             </select>
+                            <div class="invalid-feedback">
+                                Please select a section
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -146,7 +166,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Contact Number</label>
                             <div class="input-group">
@@ -160,7 +180,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-12">
                             <label class="form-label fw-bold">Address</label>
                             <div class="input-group">
@@ -190,9 +210,9 @@
     </div>
 </div>
 
-<!-- Dynamic Section Dropdown with AJAX -->
+<!-- Dynamic Section Dropdown + Form Validation Script -->
 <script>
-$(document).ready(function() {
+$(document).ready(function () {
     // Initialize Select2
     $('.select2').select2({
         theme: 'bootstrap-5',
@@ -200,33 +220,44 @@ $(document).ready(function() {
     });
 
     // Load sections when class changes
-    $('#classSelect').change(function() {
+    $('#classSelect').on('change', function () {
         const classId = $(this).val();
         const sectionSelect = $('#sectionSelect');
         
-        sectionSelect.empty().append('<option value="">No Section</option>');
+        sectionSelect.empty().append('<option value="">Select Section</option>');
         
         if (classId) {
-            $.get(`/api/classes/${classId}/sections`, function(sections) {
-                sections.forEach(section => {
-                    sectionSelect.append(new Option(section.name, section.id));
-                });
-                
-                // Select old value if exists (for form re-population)
-                @if(old('section_id'))
-                    sectionSelect.val({{ old('section_id') }}).trigger('change');
-                @endif
+            $.ajax({
+                url: `/classes/${classId}/sections`,
+                method: 'GET',
+                success: function(sections) {
+                    sections.forEach(section => {
+                        sectionSelect.append(new Option(section.name, section.id));
+                    });
+                    
+                    // Set old value if exists
+                    @if(old('section_id'))
+                        sectionSelect.val("{{ old('section_id') }}").trigger('change');
+                    @endif
+                },
+                error: function(xhr) {
+                    console.error('Error loading sections:', xhr.responseText);
+                }
             });
         }
     });
 
-    // Bootstrap form validation
+    // Trigger initial load if class is preselected
+    @if(old('class_id'))
+        $('#classSelect').trigger('change');
+    @endif
+
+    // Form validation
     (function() {
         'use strict';
         const forms = document.querySelectorAll('.needs-validation');
-        
         Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
+            form.addEventListener('submit', function(event) {
                 if (!form.checkValidity()) {
                     event.preventDefault();
                     event.stopPropagation();
@@ -235,26 +266,40 @@ $(document).ready(function() {
             }, false);
         });
     })();
+
+    // Fix for gender radio buttons validation
+    document.querySelector('form').addEventListener('submit', function() {
+        const genderSelected = document.querySelector('input[name="gender"]:checked');
+        const genderFeedback = document.querySelector('.invalid-feedback.d-block');
+        
+        if (!genderSelected) {
+            genderFeedback.style.display = 'block';
+        } else {
+            genderFeedback.style.display = 'none';
+        }
+    });
 });
 </script>
 
 <style>
-    .card-header {
-        background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);
-    }
-    .btn-group .btn {
-        flex: 1;
-    }
-    .select2-container--bootstrap-5 .select2-selection {
-        padding: 0.375rem 0.75rem;
-        height: auto;
-    }
-    .input-group-text {
-        min-width: 45px;
-        justify-content: center;
-    }
-    .was-validated .btn-group .btn-outline-primary:invalid ~ .invalid-feedback {
-        display: block;
-    }
+.card-header {
+    background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);
+}
+.btn-group .btn {
+    flex: 1;
+}
+.select2-container--bootstrap-5 .select2-selection {
+    padding: 0.375rem 0.75rem;
+    height: auto;
+}
+.input-group-text {
+    min-width: 45px;
+    justify-content: center;
+}
+.invalid-feedback.d-block {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875em;
+}
 </style>
 @endsection

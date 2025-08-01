@@ -34,7 +34,7 @@ class StudentController extends Controller
         'first_name'     => 'required|string|max:255',
         'last_name'      => 'required|string|max:255',
         'date_of_birth'  => 'required|date',
-        'gender'         => 'required|in:Male,Female,Other',
+        'gender'         => 'required|in:male,female,other',
         'class_id'       => 'required|exists:classes,id',
         'section_id'     => 'nullable|exists:sections,id',  // <-- nullable here
         'guardian_name'  => 'required|string|max:255',
@@ -88,6 +88,11 @@ public function show(Student $student)
             ->with('success', 'Student deleted successfully!');
     }
 
+public function getByClass($class_id)
+{
+    $students = Student::where('class_id', $class_id)->get();
+    return response()->json($students);
+}
 
 
 
