@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
+
             $table->string('first_name');
             $table->string('last_name');
             $table->date('date_of_birth');
@@ -24,7 +25,11 @@ return new class extends Migration
             $table->string('guardian_name');
             $table->string('contact_number');
             $table->text('address');
-            
+
+            // Fee-related fields
+            $table->boolean('is_hostel')->default(false);
+            $table->boolean('uses_transport')->default(false);
+
             $table->timestamps();
 
             // Foreign key constraints

@@ -42,9 +42,9 @@ class FeeStructureController extends Controller
 
     public function edit(FeeStructure $feeStructure)
     {
-        $classes = ClassModel::all();
+        $classes = SchoolClass::all();
         $feeTypes = FeeType::where('is_active', true)->get();
-        $sessions = AcademicSession::all();
+        $sessions = SchoolSession::all();
         return view('fee_structures.edit', compact('feeStructure', 'classes', 'feeTypes', 'sessions'));
     }
 

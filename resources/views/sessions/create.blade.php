@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Create New Academic Session')
+
 @section('content')
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
@@ -24,12 +26,13 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label class="form-label">Session Name *</label>
+                            <label for="name" class="form-label">Session Name *</label>
                             <input type="text" 
+                                   id="name"
                                    class="form-control @error('name') is-invalid @enderror" 
                                    name="name" 
                                    value="{{ old('name') }}" 
-                                   placeholder="e.g. 2023-2024" 
+                                   placeholder="e.g. 2080-2081" 
                                    required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -38,24 +41,28 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Start Date *</label>
-                                <input type="date" 
-                                       class="form-control @error('start_date') is-invalid @enderror" 
-                                       name="start_date" 
-                                       value="{{ old('start_date') }}" 
-                                       required>
+                                <label for="start_date" class="form-label">Start Date (B.S.) *</label>
+                                <input type="text"
+                                       id="start_date"
+                                       name="start_date"
+                                       class="form-control @error('start_date') is-invalid @enderror"
+                                       value="{{ old('start_date') }}"
+                                       placeholder="Select start date"
+                                       required />
                                 @error('start_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">End Date *</label>
-                                <input type="date" 
+                                <label for="end_date" class="form-label">End Date (B.S.) *</label>
+                                <input type="text" 
+                                       id="end_date"
+                                       name="end_date"
                                        class="form-control @error('end_date') is-invalid @enderror" 
-                                       name="end_date" 
-                                       value="{{ old('end_date') }}" 
-                                       required>
+                                       value="{{ old('end_date') }}"
+                                       placeholder="Select end date"
+                                       required />
                                 @error('end_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -76,7 +83,7 @@
                                 <i class="fas fa-arrow-left me-1"></i> Back
                             </a>
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-1"></i> Create
+                                <i class="fas fa-save me-1"></i> Create Session
                             </button>
                         </div>
                     </form>
@@ -85,4 +92,23 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <!-- Nepali Datepicker JS -->
+    <script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.5.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('start_date').nepaliDatePicker({
+                ndpYear: true,
+                ndpMonth: true
+            });
+
+            document.getElementById('end_date').nepaliDatePicker({
+                ndpYear: true,
+                ndpMonth: true
+            });
+        });
+    </script>
 @endsection

@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard') - School Sutra</title>
+
+    <!-- CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
+    <!-- ✅ Nepali Date Picker CSS v5.0.5 -->
+    <link href="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/css/nepali.datepicker.v5.0.5.min.css" rel="stylesheet" type="text/css"/>
+
     <style>
-        body {
-            background-color: #f0f4f8;
-        }
+        body { background-color: #f0f4f8; }
         .sidebar {
             height: 100vh;
             background-color: #1e3a8a;
@@ -18,19 +21,15 @@
             padding-top: 1rem;
             position: fixed;
             width: 220px;
-            transition: transform 0.3s ease-in-out;
             overflow-y: auto;
         }
-        .sidebar a,
-        .sidebar .dropdown-item {
+        .sidebar a, .sidebar .dropdown-item {
             color: white;
             text-decoration: none;
             display: block;
             padding: 0.75rem 1.25rem;
-            transition: background 0.2s;
         }
-        .sidebar a:hover,
-        .sidebar .dropdown-item:hover {
+        .sidebar a:hover, .sidebar .dropdown-item:hover {
             background-color: #1d4ed8;
         }
         .sidebar .active {
@@ -39,13 +38,11 @@
         .content {
             margin-left: 220px;
             padding: 2rem;
-            transition: margin-left 0.3s;
         }
         .navbar {
             background-color: #3b82f6;
         }
-        .navbar-brand,
-        .navbar a {
+        .navbar-brand, .navbar a {
             color: white !important;
         }
         .dropdown-menu {
@@ -54,27 +51,17 @@
             padding: 0;
         }
         .dropdown-item.active {
-            background-color: #2563eb;
+            background-color: #e7f1ff;
+            border-left: 3px solid #0d6efd;
+            color: #0d6efd !important;
         }
-
-
-        .dropdown-menu .dropdown-item.active {
-    background-color: #e7f1ff;
-    border-left: 3px solid #0d6efd;
-}
-
+        .nepali-date-picker {
+            z-index: 9999 !important;
+        }
         @media (max-width: 767.98px) {
-            .sidebar {
-                transform: translateX(-100%);
-                z-index: 1050;
-            }
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            .content {
-                margin-left: 0;
-                padding: 1rem;
-            }
+            .sidebar { transform: translateX(-100%); z-index: 1050; }
+            .sidebar.active { transform: translateX(0); }
+            .content { margin-left: 0; padding: 1rem; }
         }
     </style>
 </head>
@@ -102,24 +89,23 @@
                 <a href="{{ route('subjects.index') }}" class="{{ request()->routeIs('subjects.*') ? 'active' : '' }}">
                     <i class="fas fa-book me-2"></i> Subjects
                 </a>
-<!-- Fee Module Dropdown -->
-@php
-    $feeActive = request()->is('fee-types*') || request()->is('fee-structures*') || request()->is('payment-methods*') || request()->is('payments*');
-@endphp
 
-<div class="dropdown {{ $feeActive ? 'show' : '' }}">
-    <a href="#" class="dropdown-toggle d-block {{ $feeActive ? 'active text-white bg-primary' : '' }}" 
-       data-bs-toggle="dropdown" aria-expanded="{{ $feeActive ? 'true' : 'false' }}">
-        <i class="fas fa-money-bill-wave me-2"></i> Fees
-    </a>
-    <div class="dropdown-menu w-100 {{ $feeActive ? 'show' : '' }}">
-        <a href="{{ route('fee-types.index') }}" class="dropdown-item {{ request()->is('fee-types*') ? 'active text-primary fw-bold' : '' }}">Fee Types</a>
-        <a href="{{ route('fee-structures.index') }}" class="dropdown-item {{ request()->is('fee-structures*') ? 'active text-primary fw-bold' : '' }}">Fee Structures</a>
-        <a href="{{ route('payment-methods.index') }}" class="dropdown-item {{ request()->is('payment-methods*') ? 'active text-primary fw-bold' : '' }}">Payment Methods</a>
-        <a href="{{ route('payments.index') }}" class="dropdown-item {{ request()->is('payments*') ? 'active text-primary fw-bold' : '' }}">Payments</a>
-    </div>
-</div>
+                @php
+                    $feeActive = request()->is('fee-types*') || request()->is('fee-structures*') || request()->is('payment-methods*') || request()->is('payments*');
+                @endphp
 
+                <div class="dropdown {{ $feeActive ? 'show' : '' }}">
+                    <a href="#" class="dropdown-toggle d-block {{ $feeActive ? 'active text-white bg-primary' : '' }}" 
+                       data-bs-toggle="dropdown" aria-expanded="{{ $feeActive ? 'true' : 'false' }}">
+                        <i class="fas fa-money-bill-wave me-2"></i> Fees
+                    </a>
+                    <div class="dropdown-menu w-100 {{ $feeActive ? 'show' : '' }}">
+                        <a href="{{ route('fee-types.index') }}" class="dropdown-item {{ request()->is('fee-types*') ? 'active' : '' }}">Fee Types</a>
+                        <a href="{{ route('fee-structures.index') }}" class="dropdown-item {{ request()->is('fee-structures*') ? 'active' : '' }}">Fee Structures</a>
+                        <a href="{{ route('payment-methods.index') }}" class="dropdown-item {{ request()->is('payment-methods*') ? 'active' : '' }}">Payment Methods</a>
+                        <a href="{{ route('payments.index') }}" class="dropdown-item {{ request()->is('payments*') ? 'active' : '' }}">Payments</a>
+                    </div>
+                </div>
 
                 <a href="#" class="{{ request()->is('attendance*') ? 'active' : '' }}">
                     <i class="fas fa-user-check me-2"></i> Attendance
@@ -144,7 +130,7 @@
             <!-- Navbar -->
             <nav class="navbar navbar-expand navbar-light px-3 mb-4">
                 <div class="container-fluid">
-                    <button id="menuBtn" class="navbar-toggler d-md-none" type="button" aria-label="Toggle menu">
+                    <button id="menuBtn" class="navbar-toggler d-md-none" type="button">
                         <i class="fas fa-bars"></i>
                     </button>
                     <span class="navbar-brand">
@@ -166,14 +152,24 @@
         </main>
     </div>
 
-    <!-- Bootstrap JS -->
+    @stack('scripts')
+
+    <!-- JS Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ✅ Correct Nepali Datepicker v5.0.5 JS -->
+    <script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.5.min.js"></script>
+
     <script>
-        const menuBtn = document.getElementById('menuBtn');
-        const sidebar = document.getElementById('sidebar');
-        menuBtn?.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
+        $(document).ready(function() {
+            // Sidebar toggle for mobile
+            $('#menuBtn').click(function() {
+                $('#sidebar').toggleClass('active');
+            });
         });
     </script>
+
+    @yield('scripts')
 </body>
 </html>

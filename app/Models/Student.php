@@ -26,11 +26,19 @@ class Student extends Model
         'address',
     ];
 
+
+// this code is to track fee
+
+    public function payments() {
+    return $this->hasMany(Payment::class);
+}
+
+
     // Define relationship to class
     public function class()
     {
         return $this->belongsTo(SchoolClass::class, 'class_id');
-        // Or use SchoolClass::class if you renamed the model
+        
     }
 
     //  Define relationship to section

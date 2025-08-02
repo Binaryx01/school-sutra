@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Register New Student')
+
 @section('content')
 <div class="container py-4">
     <div class="card border-0 shadow-lg">
@@ -13,7 +15,7 @@
                 </a>
             </div>
         </div>
-        
+
         <div class="card-body">
             @if($errors->any())
                 <div class="alert alert-danger mb-4">
@@ -41,11 +43,8 @@
                                 <span class="input-group-text bg-primary text-white">
                                     <i class="fas fa-user"></i>
                                 </span>
-                                <input type="text" name="first_name" class="form-control" 
-                                       value="{{ old('first_name') }}" required>
-                                <div class="invalid-feedback">
-                                    Please provide a first name
-                                </div>
+                                <input type="text" name="first_name" class="form-control" value="{{ old('first_name') }}" required>
+                                <div class="invalid-feedback">Please provide a first name</div>
                             </div>
                         </div>
 
@@ -55,52 +54,42 @@
                                 <span class="input-group-text bg-primary text-white">
                                     <i class="fas fa-user"></i>
                                 </span>
-                                <input type="text" name="last_name" class="form-control" 
-                                       value="{{ old('last_name') }}" required>
-                                <div class="invalid-feedback">
-                                    Please provide a last name
-                                </div>
+                                <input type="text" name="last_name" class="form-control" value="{{ old('last_name') }}" required>
+                                <div class="invalid-feedback">Please provide a last name</div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Date of Birth</label>
+                            <label for="date_of_birth" class="form-label fw-bold">Date of Birth (B.S.)</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-primary text-white">
-                                    <i class="fas fa-calendar-day"></i>
+                                    <i class="fas fa-calendar-alt"></i>
                                 </span>
-                                <input type="date" name="date_of_birth" class="form-control"
-                                       value="{{ old('date_of_birth') }}" required>
-                                <div class="invalid-feedback">
-                                    Please select date of birth
-                                </div>
+                                <input type="text" 
+                                       name="date_of_birth" 
+                                       id="date_of_birth" 
+                                       class="form-control" 
+                                       placeholder="Select Nepali Date" 
+                                       autocomplete="off"
+                                       value="{{ old('date_of_birth') }}" 
+                                       required>
+                                <div class="invalid-feedback">Please select date of birth</div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Gender</label>
                             <div class="btn-group w-100" role="group" aria-label="Gender selection">
-                                <input type="radio" class="btn-check" name="gender" id="male" 
-                                       value="male" {{ old('gender', 'male') == 'male' ? 'checked' : '' }} required>
-                                <label class="btn btn-outline-primary" for="male">
-                                    <i class="fas fa-mars me-2"></i>Male
-                                </label>
+                                <input type="radio" class="btn-check" name="gender" id="male" value="male" {{ old('gender', 'male') == 'male' ? 'checked' : '' }} required>
+                                <label class="btn btn-outline-primary" for="male"><i class="fas fa-mars me-2"></i>Male</label>
 
-                                <input type="radio" class="btn-check" name="gender" id="female" 
-                                       value="female" {{ old('gender') == 'female' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-primary" for="female">
-                                    <i class="fas fa-venus me-2"></i>Female
-                                </label>
+                                <input type="radio" class="btn-check" name="gender" id="female" value="female" {{ old('gender') == 'female' ? 'checked' : '' }}>
+                                <label class="btn btn-outline-primary" for="female"><i class="fas fa-venus me-2"></i>Female</label>
 
-                                <input type="radio" class="btn-check" name="gender" id="other" 
-                                       value="other" {{ old('gender') == 'other' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-primary" for="other">
-                                    <i class="fas fa-genderless me-2"></i>Other
-                                </label>
+                                <input type="radio" class="btn-check" name="gender" id="other" value="other" {{ old('gender') == 'other' ? 'checked' : '' }}>
+                                <label class="btn btn-outline-primary" for="other"><i class="fas fa-genderless me-2"></i>Other</label>
                             </div>
-                            <div class="invalid-feedback d-block">
-                                @error('gender') {{ $message }} @enderror
-                            </div>
+                            <div class="invalid-feedback d-block">@error('gender') {{ $message }} @enderror</div>
                         </div>
                     </div>
                 </div>
@@ -122,9 +111,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <div class="invalid-feedback">
-                                Please select a class
-                            </div>
+                            <div class="invalid-feedback">Please select a class</div>
                         </div>
 
                         <div class="col-md-6">
@@ -139,8 +126,24 @@
                                     @endforeach
                                 @endif
                             </select>
-                            <div class="invalid-feedback">
-                                Please select a section
+                            <div class="invalid-feedback">Please select a section</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check mt-2">
+                                <input type="checkbox" class="form-check-input" id="is_hostel" name="is_hostel" value="1" {{ old('is_hostel') ? 'checked' : '' }}>
+                                <label class="form-check-label fw-bold" for="is_hostel">
+                                    <i class="fas fa-bed me-1"></i>Is Hostel Student?
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check mt-2">
+                                <input type="checkbox" class="form-check-input" id="uses_transport" name="uses_transport" value="1" {{ old('uses_transport') ? 'checked' : '' }}>
+                                <label class="form-check-label fw-bold" for="uses_transport">
+                                    <i class="fas fa-bus me-1"></i>Uses School Transport?
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -156,41 +159,27 @@
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Guardian Name</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-primary text-white">
-                                    <i class="fas fa-user-shield"></i>
-                                </span>
-                                <input type="text" name="guardian_name" class="form-control"
-                                       value="{{ old('guardian_name') }}" required>
-                                <div class="invalid-feedback">
-                                    Please provide guardian name
-                                </div>
+                                <span class="input-group-text bg-primary text-white"><i class="fas fa-user-shield"></i></span>
+                                <input type="text" name="guardian_name" class="form-control" value="{{ old('guardian_name') }}" required>
+                                <div class="invalid-feedback">Please provide guardian name</div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Contact Number</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-primary text-white">
-                                    <i class="fas fa-phone"></i>
-                                </span>
-                                <input type="text" name="contact_number" class="form-control"
-                                       value="{{ old('contact_number') }}" required>
-                                <div class="invalid-feedback">
-                                    Please provide contact number
-                                </div>
+                                <span class="input-group-text bg-primary text-white"><i class="fas fa-phone"></i></span>
+                                <input type="text" name="contact_number" class="form-control" value="{{ old('contact_number') }}" required>
+                                <div class="invalid-feedback">Please provide contact number</div>
                             </div>
                         </div>
 
                         <div class="col-12">
                             <label class="form-label fw-bold">Address</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-primary text-white">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </span>
+                                <span class="input-group-text bg-primary text-white"><i class="fas fa-map-marker-alt"></i></span>
                                 <textarea name="address" class="form-control" rows="2" required>{{ old('address') }}</textarea>
-                                <div class="invalid-feedback">
-                                    Please provide address
-                                </div>
+                                <div class="invalid-feedback">Please provide address</div>
                             </div>
                         </div>
                     </div>
@@ -209,17 +198,35 @@
         </div>
     </div>
 </div>
+@endsection
 
-<!-- Dynamic Section Dropdown + Form Validation Script -->
+@section('scripts')
+<!-- Nepali Date Picker JS -->
+<script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.5.min.js"></script>
+
 <script>
 $(document).ready(function () {
+    // Initialize Nepali Date Picker with more options
+    $('#date_of_birth').nepaliDatePicker({
+        ndpYear: true,
+        ndpMonth: true,
+        ndpYearCount: 100,
+        language: "english",
+        dateFormat: "YYYY-MM-DD",
+        closeOnDateSelect: true,
+        disableDaysAfter: 0, // Disable future dates
+        onChange: function() {
+            // Validate the selected date if needed
+        }
+    });
+
     // Initialize Select2
     $('.select2').select2({
         theme: 'bootstrap-5',
         width: '100%'
     });
 
-    // Load sections when class changes
+    // Dynamic section loading based on class selection
     $('#classSelect').on('change', function () {
         const classId = $(this).val();
         const sectionSelect = $('#sectionSelect');
@@ -234,8 +241,6 @@ $(document).ready(function () {
                     sections.forEach(section => {
                         sectionSelect.append(new Option(section.name, section.id));
                     });
-                    
-                    // Set old value if exists
                     @if(old('section_id'))
                         sectionSelect.val("{{ old('section_id') }}").trigger('change');
                     @endif
@@ -247,7 +252,7 @@ $(document).ready(function () {
         }
     });
 
-    // Trigger initial load if class is preselected
+    // Trigger change if class is already selected (form validation fail)
     @if(old('class_id'))
         $('#classSelect').trigger('change');
     @endif
@@ -266,18 +271,6 @@ $(document).ready(function () {
             }, false);
         });
     })();
-
-    // Fix for gender radio buttons validation
-    document.querySelector('form').addEventListener('submit', function() {
-        const genderSelected = document.querySelector('input[name="gender"]:checked');
-        const genderFeedback = document.querySelector('.invalid-feedback.d-block');
-        
-        if (!genderSelected) {
-            genderFeedback.style.display = 'block';
-        } else {
-            genderFeedback.style.display = 'none';
-        }
-    });
 });
 </script>
 
@@ -300,6 +293,10 @@ $(document).ready(function () {
     display: block;
     color: #dc3545;
     font-size: 0.875em;
+}
+/* Nepali Date Picker styling */
+.nepali-date-picker {
+    z-index: 9999 !important;
 }
 </style>
 @endsection
